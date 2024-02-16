@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "Debuger języka Python: Django",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}\\manage.py",
+            "args": [
+                "runserver",
+                "9000"
+            ],
+            "django": true
+        }
+    ]
+}
