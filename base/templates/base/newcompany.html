@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    <form method = "POST" action = "">
+        {% csrf_token %}
+
+        <label>Company Name: </label>
+        <input type = "text" name= "name" placeholder = "Enter company name"/>
+
+        <label>Symbol: </label>
+        <input type = "text" name= "symbol" placeholder = "Enter symbol"/>
+
+        <input type = "submit" value = "comp"/>
+
+    </form>
+</div>
+<div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %} 
+            {% if forloop.first %}
+            <p>Last week of your company</p>
+            {% endif %}
+        <li>{{message}} </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<div class="home-containter">
+    <div>
+        <h3>Browse Companies</h3>
+        <hr>
+        <div>
+          {% for company in companies %}
+          <a href= "{% url 'home' %}?q={{company.name}}">{{company.name}}</a>
+          <br>
+          {% endfor %}
+        </div>
+    </div>
+    <div>
+      <p>{{company.name}}</p>
+      <ul>
+      {% for item in prices %}
+        <li>
+          {{item.date}}   
+          <span class="close">Close:</span> {{ item.close }}
+        </li>
+        <br>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+
+{% endblock content %}
