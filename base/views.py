@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect
 from django.db.models import Q
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -8,6 +7,13 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Company,Prices
 from datetime import date, timedelta
+import matplotlib.pyplot as plt
+import io
+import urllib,base64
+import pandas as pd
+import matplotlib
+
+
 def loginPage(request):
     page = 'login'
     if request.user.is_authenticated:
@@ -54,8 +60,9 @@ def home(request):
     comp = Company.objects.get(name = q)
     prices = Prices.objects.filter(symbol = comp.pk)
     
-    if (prices.order_by('-date')[0].date != date.today()- timedelta(days=1)) and date.today().weekday()!=0:
+    if (prices.order_by('-date')[0].date != date.today()- timedelta(days=1)) and date.today().weekday()!=0 and date.today().weekday()!=1:
         Prices.update_values(Company.objects.first().pk)
+        prices = Prices.objects.filter(symbol = comp.pk)
         
     companies= Company.objects.all()[0:5]
     
@@ -81,3 +88,46 @@ def getNewCompany(request):
             messages.error(request,"Company invalid or doesnt exist")
     context= {}
     return render(request,'base/newcompany.html',context)
+
+def companyRoom(request):
+    q= request.GET.get('q') if request.GET.get('q') != None else 'IBM'
+    comp = Company.objects.get(name = q)
+    prices = Prices.objects.filter(symbol = comp.pk)
+    comp.updateCompany(symbol=comp.symbol)
+    comp.save()
+    if (prices.order_by('-date')[0].date != date.today()- timedelta(days=1)) and date.today().weekday()!=0 and date.today().weekday()!=1:
+        Prices.update_values(Company.objects.first().pk)
+        prices = Prices.objects.filter(symbol = comp.pk)
+    df=pd.DataFrame.from_records(
+        Prices.objects.filter(symbol = comp.pk).values('date','close')                                 
+        )
+    matplotlib.use('agg')
+    plt.plot(df['date'],df['close'])
+    fig=plt.gcf()
+    buf=io.BytesIO()
+    fig.savefig(buf,format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri=urllib.parse.quote(string)
+    buf.close()
+    plt.clf()
+    
+    returnOnSales = comp.netprofit/comp.grossprofit
+    earnPerShare = comp.netprofit/comp.volume
+    bookValue = (comp.assets-comp.liabilities)/comp.volume
+    priceBookValue = float(df['close'].iloc[0])/bookValue
+    percLiab= (comp.liabilities/comp.assets)*100
+    
+    
+    context={
+        'company':comp.name,
+        'prices':df[:5].to_html(),
+        'fig':uri,
+        'returnOnSales':returnOnSales,
+        'earnPerShare':earnPerShare,
+        'bookValue':bookValue,
+        'priceBookValue':priceBookValue,
+        'percLiab':percLiab,    
+
+        }
+    return render(request,'base/company.html',context)

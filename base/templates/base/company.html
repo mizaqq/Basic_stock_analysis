@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% load static %}
+{% block content %}
+    <div>
+        <h1>{{company}}</h1>
+        {{prices | safe}}
+    </div>
+    <div>
+        <img src="data:image/png;base64,{{ fig }}" alt="" height="250",width="250">
+    </div>
+    <div class="container">
+        <div class="column">
+            <ul class="two-column-list">
+                <li>Return on Sales: {{ returnOnSales|floatformat:3 }}</li>
+                <li>Book Value: {{ bookValue|floatformat:3 }}</li>
+                <li>Level of liability: {{ percLiab|floatformat:2 }}%</li>
+            </ul>
+        </div>
+        <div class="column">
+            <ul class="two-column-list">
+                <li>Earn per Share: {{ earnPerShare|floatformat:3 }}</li>
+                <li>Price/Book Value{{ priceBookValue|floatformat:3 }}</li>
+
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

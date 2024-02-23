@@ -4,15 +4,42 @@ import requests
 from polygon import RESTClient
 import pandas as pd
 from datetime import datetime,date
-# Create your models here.
+from django.contrib.auth.models import AbstractUser
 
 class Company(models.Model):
     name = models.CharField(max_length=200)
     symbol = models.CharField(max_length=20,unique=True)
     volume = models.BigIntegerField(null = True)
+    netprofit = models.BigIntegerField(null = True)
+    assets = models.BigIntegerField(null = True)
+    liabilities = models.BigIntegerField(null = True)
+    grossprofit = models.BigIntegerField(null = True)
     
     def __str__(self):
         return self.name
+    
+    def updateCompany(self,symbol):
+        base_url = 'https://financialmodelingprep.com/api/v3/financial-statement-full-as-reported/'
+        api_key = 'CHcU2OCBxHu2VASGjxt8vIzBTexm7Hke'
+        params = {
+            'period': 'annual',
+            'apikey': api_key,
+        }
+        response = requests.get(f'{base_url}{symbol}', params=params)
+        data = response.json()
+        self.netprofit=int(data[0]['netincomeloss'])
+        self.assets=int(data[0]['assets'])
+        self.liabilities=int(data[0]['liabilities'])
+        self.grossprofit=int(data[0]['grossprofit'])
+        
+        base_url = 'https://api.polygon.io/v3/reference/tickers/' +symbol
+        api_key='JfpEqKFDa_3455NuDEF6DhE8Q2_E7gxR'
+        params = {
+            'apiKey': api_key,
+        }
+        response = requests.get(base_url,params=params)
+        data = response.json()
+        self.volume=int(data['results']['share_class_shares_outstanding'])
 
 
 class Prices(models.Model):

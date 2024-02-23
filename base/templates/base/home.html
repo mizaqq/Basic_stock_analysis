@@ -1,5 +1,5 @@
 {% extends "main.html" %}
-
+{% load static %}
 {% block content %}
 
 <div class="home-containter">
@@ -14,7 +14,7 @@
         </div>
     </div>
     <div>
-      <p>{{company.name}}</p>
+      <a href= "{% url 'companyRoom' %}?q={{company.name}}">{{company.name}}</a>
       <ul>
       {% for item in prices %}
         <li>
