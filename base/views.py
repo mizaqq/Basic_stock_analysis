@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Company,Prices
 from datetime import date, timedelta
+from .utils import make_plot
 import matplotlib.pyplot as plt
 import io
 import urllib,base64
@@ -73,11 +74,11 @@ def getNewCompany(request):
     if request.method == "POST":
         name = request.POST.get('name')
         symbol = request.POST.get('symbol').upper()
-        try:
+        if Company.objects.filter(symbol=symbol).exists() == False:
             comp = Company(name=name, symbol = symbol)
             comp.save()
-        except:
-            messages.error(request,"Company already in db")
+        else:
+            comp= Company.objects.get(symbol=symbol)
         Prices.update_values(Company.objects.get(symbol = symbol).pk)
         prices=Prices.objects.filter(symbol=Company.objects.get(symbol = symbol)).order_by('-date')[:5]
         if prices.exists():
@@ -91,7 +92,11 @@ def getNewCompany(request):
 
 def companyRoom(request):
     q= request.GET.get('q') if request.GET.get('q') != None else 'IBM'
-    comp = Company.objects.get(name = q)
+    try:
+        comp = Company.objects.get(name = q)
+    except:
+        messages.error(request,"Company not existing, add it")
+        return redirect('newcompany')
     prices = Prices.objects.filter(symbol = comp.pk)
     comp.updateCompany(symbol=comp.symbol)
     comp.save()
@@ -101,16 +106,10 @@ def companyRoom(request):
     df=pd.DataFrame.from_records(
         Prices.objects.filter(symbol = comp.pk).values('date','close')                                 
         )
-    matplotlib.use('agg')
-    plt.plot(df['date'],df['close'])
-    fig=plt.gcf()
-    buf=io.BytesIO()
-    fig.savefig(buf,format='png')
-    buf.seek(0)
-    string = base64.b64encode(buf.read())
-    uri=urllib.parse.quote(string)
-    buf.close()
-    plt.clf()
+    uri = make_plot(df)
+    months3=date.today()- timedelta(days=90)
+    uri3 = make_plot(df[df['date']>months3])
+    
     
     returnOnSales = comp.netprofit/comp.grossprofit
     earnPerShare = comp.netprofit/comp.volume
@@ -123,6 +122,7 @@ def companyRoom(request):
         'company':comp.name,
         'prices':df[:5].to_html(),
         'fig':uri,
+        'fig3':uri3,
         'returnOnSales':returnOnSales,
         'earnPerShare':earnPerShare,
         'bookValue':bookValue,

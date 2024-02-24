@@ -1,13 +1,24 @@
 {% extends "main.html" %}
 {% load static %}
 {% block content %}
-    <div>
+
+    <div class = "containter">
         <h1>{{company}}</h1>
         {{prices | safe}}
     </div>
-    <div>
-        <img src="data:image/png;base64,{{ fig }}" alt="" height="250",width="250">
-    </div>
+   <ul class="nav nav-tabs">
+       <li class="nav-item active"><a class= "nav-link active" data-bs-toggle="tab" href="#year">1 Year</a></li>
+       <li><a class= "nav-link" data-bs-toggle="tab" href="#month3">3 Months</a></li>
+     </ul>
+     
+     <div class="tab-content">
+       <div id="year" class="tab-pane fade show active">
+           <img src="data:image/png;base64,{{ fig }}" alt="" height="250",width="250">
+       </div>
+       <div id="month3" class="tab-pane fade">
+           <img src="data:image/png;base64,{{ fig3 }}" alt="" height="250",width="250">
+       </div>
+     </div>
     <div class="container">
         <div class="column">
             <ul class="two-column-list">
@@ -19,9 +30,10 @@
         <div class="column">
             <ul class="two-column-list">
                 <li>Earn per Share: {{ earnPerShare|floatformat:3 }}</li>
-                <li>Price/Book Value{{ priceBookValue|floatformat:3 }}</li>
+                <li>Price/Book Value: {{ priceBookValue|floatformat:3 }}</li>
 
             </ul>
         </div>
     </div>
+
 {% endblock content %}

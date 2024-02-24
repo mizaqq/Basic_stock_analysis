@@ -1,34 +1,44 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div>
-    <form method = "POST" action = "">
-        {% csrf_token %}
-
-        <label>Company Name: </label>
-        <input type = "text" name= "name" placeholder = "Enter company name"/>
-
-        <label>Symbol: </label>
-        <input type = "text" name= "symbol" placeholder = "Enter symbol"/>
-
-        <input type = "submit" value = "comp"/>
-
-    </form>
-</div>
-<div>
-    {% if messages %}
-    <ul class="messages">
+<div class="row mt-1">
+    <div class="col-md-3">
+    </div>
+    <div class = "col-md-6">
+        <form method = "POST" action = "">
+            {% csrf_token %}
+            <div data-mdb-input-init class="form-outline mb-4">
+                <input type="text" name = "name" id="form1Example1" class="form-control" />
+                <label class="form-label" for="form1Example1">Company name</label>
+              </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+                <input type="text" name= "symbol" id="form1Example2" class="form-control" />
+                <label class="form-label" for="form1Example2">Enter symbol</label>
+            </div>
+            <div class="text-center">
+            <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block alling ">Get company</button>
+            </div>
+        </form>
         {% for message in messages %}
-        
         {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %} 
             {% if forloop.first %}
-            <p>Last week of your company</p>
+                <table class="table table-hover table-sm">
+                <thead>
+                  <tr><th>Last 5 days of your company</th></tr>
+                </thead>
+                <tbody>
             {% endif %}
-        <li>{{message}} </li>
+            <tr class="table-active">
+                <td>{{message}}</td> 
+            </tr>
+            {% if forloop.last %}
+                </tbody></table><a href= "{% url 'companyRoom' %}?q={{symbol}}" class="btn btn-secondary btn-block w-100">Get more details</a>
+            {% endif %}
         {% endif %}
-        {% endfor %}
-    </ul>
-    {% endif %}
-</div>
+    {% endfor %}
 
+    </div>
+<div class="col-md-3">
+</div>
+</div>
 {% endblock %}
