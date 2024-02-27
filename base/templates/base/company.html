@@ -2,38 +2,140 @@
 {% load static %}
 {% block content %}
 
-    <div class = "containter">
-        <h1>{{company}}</h1>
-        {{prices | safe}}
-    </div>
-   <ul class="nav nav-tabs">
-       <li class="nav-item active"><a class= "nav-link active" data-bs-toggle="tab" href="#year">1 Year</a></li>
-       <li><a class= "nav-link" data-bs-toggle="tab" href="#month3">3 Months</a></li>
-     </ul>
-     
-     <div class="tab-content">
-       <div id="year" class="tab-pane fade show active">
-           <img src="data:image/png;base64,{{ fig }}" alt="" height="250",width="250">
-       </div>
-       <div id="month3" class="tab-pane fade">
-           <img src="data:image/png;base64,{{ fig3 }}" alt="" height="250",width="250">
-       </div>
-     </div>
-    <div class="container">
-        <div class="column">
-            <ul class="two-column-list">
-                <li>Return on Sales: {{ returnOnSales|floatformat:3 }}</li>
-                <li>Book Value: {{ bookValue|floatformat:3 }}</li>
-                <li>Level of liability: {{ percLiab|floatformat:2 }}%</li>
-            </ul>
+<div class="row g-0">
+        <ul class="nav nav-tabs">
+            <li class="nav-item active"><a class= "nav-link active" data-bs-toggle="tab" href="#year">1 Year</a></li>
+            <li><a class= "nav-link" data-bs-toggle="tab" href="#month3">3 Months</a></li>
+          </ul>
+		<div class="col-md-5">
+          <div class="tab-content">
+            <div id="year" class="tab-pane fade show active">
+                <img src="data:image/png;base64,{{ fig }}" class="img-fluid" alt="Responsive image" height="fit-content",width="fit-content">
+            </div>
+            <div id="month3" class="tab-pane fade">
+                <img src="data:image/png;base64,{{ fig3 }}" class="img-fluid" alt="Responsive image" height="fit-content",width="fit-content">
+            </div>
         </div>
-        <div class="column">
-            <ul class="two-column-list">
-                <li>Earn per Share: {{ earnPerShare|floatformat:3 }}</li>
-                <li>Price/Book Value: {{ priceBookValue|floatformat:3 }}</li>
+    </div>
+    <div class="col-md-7 " >
+        <div id="accordion" >
+            <div class="card">
+              <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                  <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Close Value: {{prices.values.0.1}}
+                  </button>
+                </h5>
+              </div>
+          
+              <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordion">
+                <div class="card-body">
+                  Anim pariatur cliche reprehenderit
+              </div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                  <button class="btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Book Value: {{ bookValue|floatformat:3 }}
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordion">
+                <div class="card-body">
+                  Anim pariatur cliche reprehenderit, 
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                  <button class="btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    
+                    Price/Book Value: {{ priceBookValue|floatformat:3 }}
+                  </button>
+                </h5>
+              </div>
+              <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-bs-parent="#accordion">
+                <div class="card-body">
+                  Anim pariatur cliche reprehenderit, 
+                </div>
+              </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingFour">
+                  <h5 class="mb-0">
+                    <button class="btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                        Earn per Share: {{ earnPerShare|floatformat:3 }}
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-bs-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, 
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header" id="headingFive">
+                  <h5 class="mb-0">
+                    <button class="btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                        Level of liability: {{ percLiab|floatformat:2 }}%
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-bs-parent="#accordion">
+                  <div class="card-body">
+                    Anim pariatur cliche reprehenderit, 
+                  </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingSix">
+                      <h5 class="mb-0">
+                        <button class="btn collapsed" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseThree">
+                            Return on Sales: {{ returnOnSales|floatformat:3 }}
+                        </button>
+                      </h5>
+                    </div>
+                    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-bs-parent="#accordion">
+                      <div class="card-body">
+                        Anim pariatur cliche reprehenderit, 
+                      </div>
+                    </div>
+              </div>
+          </div>
+          <div>
+            <table class="table">
+                <thead>
+                    <tr><th>Date</th><th>Close price</th></tr>
+                 </thead> 
+                     <tbody>
+                          {% for row in prices.values %}
+                             <tr class="table-active">
+                             {% for cell in row %}
+                             <td>
+                             {{ cell }}
+                             </td> 
+                             {% endfor %}
+                             </tr>
+                         {% endfor %}
+                     </tbody>
+                 </table>
+          </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="row ">
+	<div class="col-md-2">
+            
+	</div>
+	<div class="col-md-8">
 
-            </ul>
-        </div>
+		</div>
+	<div class="col-md-2">
     </div>
+</div>
 
 {% endblock content %}
+

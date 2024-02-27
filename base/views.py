@@ -52,7 +52,7 @@ def registerPage(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request,'An error occured during registration')
+            messages.error(request,list(form.errors.values()))
     context={'form':form}
     return render(request,'base/login_register.html',context)
     
@@ -120,7 +120,7 @@ def companyRoom(request):
     
     context={
         'company':comp.name,
-        'prices':df[:5].to_html(),
+        'prices':df[:5],
         'fig':uri,
         'fig3':uri3,
         'returnOnSales':returnOnSales,

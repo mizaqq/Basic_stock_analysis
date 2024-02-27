@@ -30,6 +30,7 @@
           <td>
           {{ item.close }}
           </td>
+        </tr>
       {% endfor %}
     </tbody>
   </table><a href= "{% url 'companyRoom' %}?q={{company.name}}" class="btn btn-secondary btn-block w-100">Get more details</a>
