@@ -30,9 +30,8 @@ blocks:
             - python manage.py test
         - name: checklist
           commands:
-            - cd basic_stock_analysis
             - python manage.py check --deploy
         - name: style
           commands:
             - pip install flake8
-            - flake8 basic_stock_analysis/ --max-line-length=127
+            - flake8 . --max-line-length=127
