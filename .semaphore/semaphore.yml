@@ -21,13 +21,12 @@ blocks:
       jobs:
         - name: tests
           commands:
-            - cd Basic_stock_analysis
+            - pwd
             - python manage.py makemigrations
             - python manage.py migrate
             - python manage.py test
         - name: checklist
           commands:
-            - getcwd
             - python manage.py check --deploy
         - name: style
           commands:
