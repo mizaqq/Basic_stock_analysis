@@ -16,3 +16,19 @@ blocks:
             - cache restore
             - pip install --cache-dir .pip_cache -r requirements.txt
             - cache store
+  - name: Test
+    task:
+      jobs:
+        - name: tests
+          commands:
+            - sem-version python 3.11
+            - checkout
+            - cache restore
+            - pip install --cache-dir .pip_cache -r requirements.txt
+            - python manage.py makemigrations
+            - python manage.py migrate
+            - python manage.py test
+        - name: checklist
+          commands:
+            - pip install flake8
+            - flake8 basic_stock_analysis/ --max-line-length=127
