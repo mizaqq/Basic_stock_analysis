@@ -27,7 +27,7 @@ blocks:
             - python manage.py test
         - name: checklist
           commands:
-            - cd Basic_stock_analysis
+            - getcwd
             - python manage.py check --deploy
         - name: style
           commands:
