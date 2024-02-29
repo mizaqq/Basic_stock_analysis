@@ -30,5 +30,5 @@ blocks:
             - python manage.py test
         - name: checklist
           commands:
-            - apt install flake8
-            - flake8 . --max-line-length=127
+            - pip install flake8
+            - flake8 basic_stock_analysis/ --max-line-length=127
