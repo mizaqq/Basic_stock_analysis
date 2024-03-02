@@ -5,6 +5,28 @@ from polygon import RESTClient
 import pandas as pd
 from datetime import datetime,date
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from utils.model_abstracts import Model
+from django_extensions.db.models import (
+	TimeStampedModel, 
+	ActivatorModel,
+	TitleDescriptionModel
+)
+
+class Contact(
+	TimeStampedModel, 
+	ActivatorModel,
+	TitleDescriptionModel,
+	Model
+	):
+
+	class Meta:
+		verbose_name_plural = "Contacts"
+
+	email = models.EmailField(verbose_name="Email")
+
+	def __str__(self):
+		return f'{self.title}'
 
 class Company(models.Model):
     name = models.CharField(max_length=200)

@@ -8,4 +8,5 @@ urlpatterns = [
     path('',views.home,name="home"),
     path('newcompany/',views.getNewCompany,name="newcompany"),
     path('company/',views.companyRoom,name="companyRoom"),
+    path('contact/', views.ContactAPIView.as_view()),
 ]
