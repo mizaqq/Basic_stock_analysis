@@ -27,13 +27,15 @@ class Company(models.Model):
             'period': 'annual',
             'apikey': api_key,
         }
-        response = requests.get(f'{base_url}{symbol}', params=params)
-        data = response.json()
-        self.netprofit=int(data[0]['netincomeloss'])
-        self.assets=int(data[0]['assets'])
-        self.liabilities=int(data[0]['liabilities'])
-        self.grossprofit=int(data[0]['grossprofit'])
-        
+        try:
+            response = requests.get(f'{base_url}{symbol}', params=params)
+            data = response.json()
+            self.netprofit=int(data[0]['netincomeloss'])
+            self.assets=int(data[0]['assets'])
+            self.liabilities=int(data[0]['liabilities'])
+            self.grossprofit=int(data[0]['grossprofit'])
+        except:
+            pass
         base_url = 'https://api.polygon.io/v3/reference/tickers/' +symbol
         api_key='JfpEqKFDa_3455NuDEF6DhE8Q2_E7gxR'
         params = {
