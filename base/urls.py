@@ -8,5 +8,6 @@ urlpatterns = [
     path('',views.home,name="home"),
     path('newcompany/',views.getNewCompany,name="newcompany"),
     path('company/',views.companyRoom,name="companyRoom"),
-    path('contact/', views.ContactAPIView.as_view()),
+    path('user/',views.userPage,name='userRoom'),
+    path('reset_token/',views.reset_token, name='reset_token')
 ]

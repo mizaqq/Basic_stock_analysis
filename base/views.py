@@ -15,11 +15,14 @@ import pandas as pd
 import matplotlib
 from json import JSONDecodeError
 from django.http import JsonResponse
-from .serializers import ContactSerializer
 from rest_framework.parsers import JSONParser
 from rest_framework import views, status
 from rest_framework.response import Response
-
+from rest_framework.mixins import ListModelMixin,RetrieveModelMixin
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from .serializers import CompanySerializer
+from rest_framework.authtoken.models import Token
 
 def loginPage(request):
     page = 'login'
@@ -138,28 +141,39 @@ def companyRoom(request):
         }
     return render(request,'base/company.html',context)
 
-class ContactAPIView(views.APIView):
-    serializer_class = ContactSerializer
 
-    def get_serializer_context(self):
-        return {
-            'request': self.request,
-            'format': self.format_kwarg,
-            'view': self
-        }
+def userPage(request):
+    if request.user.is_authenticated: 
+        user = request.user
+        try: 
+            token=user.auth_token
+        except:
+            Token.objects.create(user=user)
+            token=user.auth_token
+    else:
+        redirect(loginPage)
+    context={'username':user.username,'token':token}
+    return render(request,'base/user.html',context)
 
-    def get_serializer(self, *args, **kwargs):
-        kwargs['context'] = self.get_serializer_context()
-        return self.serializer_class(*args, **kwargs)
 
-    def post(self, request):
-        try:
-            data = JSONParser().parse(request)
-            serializer = ContactSerializer(data=data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except JSONDecodeError:
-            return JsonResponse({"result": "error","message": "Json decoding error"}, status= 400)
+
+def reset_token(request):
+    if request.user.is_authenticated: 
+        user = request.user
+        t = Token.objects.filter(user=user)
+        new_token = t[0].generate_key()
+        t.update(key=new_token)
+    else:
+        redirect(loginPage)
+            
+    return JsonResponse({'new_token': new_token})
+
+class CompanyViewSet(
+    ListModelMixin,
+    RetrieveModelMixin,
+    viewsets.GenericViewSet
+    ):
+    permission_classes=(IsAuthenticated,)
+    queryset=Company.objects.all()
+    serializer_class=CompanySerializer
+    
