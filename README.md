@@ -84,7 +84,7 @@ Get all the companies data and its basic indexes.
 Scrap companies data using api endpoint <br>
 Link http://16.171.170.50:8000/api/<br>
 You can get your own api key by logging in and going to your account details. You can also regenerate your token there
-<br>
+<br><br>
 Authentication has to be passed by Header in format "Authentication: Token <YOUR-API-KEY>
 <br>
 Python example
