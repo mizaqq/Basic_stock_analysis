@@ -17,7 +17,7 @@ Site also allows to scrap companies data using REST API
 * Django
 * Bootstrap
 * Docker
-Developed using AWS
+* Developed using AWS
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
