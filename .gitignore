@@ -140,3 +140,4 @@ venv.bak/
 .env.dev
 
 *.pem
+*.sqlite3

@@ -1,27 +1,13 @@
 from django.shortcuts import render,redirect
-from django.db.models import Q
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Company,Prices
 from datetime import date, timedelta
-from .utils import make_plot
-import matplotlib.pyplot as plt
-import io
-import urllib,base64
+from .utils import make_plot,update_price
 import pandas as pd
-import matplotlib
-from json import JSONDecodeError
 from django.http import JsonResponse
-from rest_framework.parsers import JSONParser
-from rest_framework import views, status
-from rest_framework.response import Response
-from rest_framework.mixins import ListModelMixin,RetrieveModelMixin
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from .serializers import CompanySerializer
 from rest_framework.authtoken.models import Token
 
 def loginPage(request):
@@ -68,11 +54,8 @@ def registerPage(request):
 def home(request):
     q= request.GET.get('q') if request.GET.get('q') != None else 'IBM'
     comp = Company.objects.get(name = q)
+    update_price(comp)
     prices = Prices.objects.filter(symbol = comp.pk)
-    
-    if (prices.order_by('-date')[0].date != date.today()- timedelta(days=1)) and date.today().weekday()!=0 and date.today().weekday()!=1:
-        Prices.update_values(Company.objects.first().pk)
-        prices = Prices.objects.filter(symbol = comp.pk)
         
     companies= Company.objects.all()[0:5]
     
@@ -88,7 +71,7 @@ def getNewCompany(request):
             comp.save()
         else:
             comp= Company.objects.get(symbol=symbol)
-        Prices.update_values(Company.objects.get(symbol = symbol).pk)
+        update_price(Company.objects.get(symbol = symbol))
         prices=Prices.objects.filter(symbol=Company.objects.get(symbol = symbol)).order_by('-date')[:5]
         if prices.exists():
             for i in prices:
@@ -106,12 +89,11 @@ def companyRoom(request):
     except:
         messages.error(request,"Company not existing, add it")
         return redirect('newcompany')
-    prices = Prices.objects.filter(symbol = comp.pk)
-    comp.updateCompany(symbol=comp.symbol)
-    comp.save()
-    if (prices.order_by('-date')[0].date != date.today()- timedelta(days=1)) and date.today().weekday()!=0 and date.today().weekday()!=1:
-        Prices.update_values(Company.objects.first().pk)
-        prices = Prices.objects.filter(symbol = comp.pk)
+    if(comp.updated.date() != date.today()):
+        comp.updateCompany(symbol=comp.symbol)
+        comp.save()
+    update_price(comp)
+    
     df=pd.DataFrame.from_records(
         Prices.objects.filter(symbol = comp.pk).values('date','close')                                 
         )
@@ -119,13 +101,23 @@ def companyRoom(request):
     months3=date.today()- timedelta(days=90)
     uri3 = make_plot(df[df['date']>months3])
     
-    
-    returnOnSales = comp.netprofit/comp.grossprofit
-    earnPerShare = comp.netprofit/comp.volume
-    bookValue = (comp.assets-comp.liabilities)/comp.volume
-    priceBookValue = float(df['close'].iloc[0])/bookValue
-    percLiab= (comp.liabilities/comp.assets)*100
-    
+    if comp.grossprofit!=None:
+        returnOnSales = comp.netprofit/comp.grossprofit
+    else:
+        returnOnSales = 0
+        
+    if comp.volume!=None:
+        earnPerShare = comp.netprofit/comp.volume
+        bookValue = (comp.assets-comp.liabilities)/comp.volume
+        priceBookValue = float(df['close'].iloc[0])/bookValue
+    else:
+        earnPerShare=0
+        bookValue=0 
+
+    if comp.assets!=None:   
+        percLiab= (comp.liabilities/comp.assets)*100
+    else:
+        percLiab=0
     
     context={
         'company':comp.name,
@@ -168,12 +160,5 @@ def reset_token(request):
             
     return JsonResponse({'new_token': new_token})
 
-class CompanyViewSet(
-    ListModelMixin,
-    RetrieveModelMixin,
-    viewsets.GenericViewSet
-    ):
-    permission_classes=(IsAuthenticated,)
-    queryset=Company.objects.all()
-    serializer_class=CompanySerializer
+
     

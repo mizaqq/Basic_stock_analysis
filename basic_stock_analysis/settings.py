@@ -1,25 +1,18 @@
 
 import os
 from pathlib import Path
+import dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-
-SECRET_KEY = os.environ.get("SECRET_KEY")
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+    
+ALLOWED_HOSTS=os.environ.get("DJANGO_ALLOWED_HOSTS","").split(',')
+    
+SECRET_KEY = os.environ.get("SECRET_KEY","abc")
 
 DEBUG = bool(os.environ.get("DEBUG", default=0))
-
-if(SECRET_KEY==None):
-    SECRET_KEY="abcd"
-    DEBUG=True
-    
-ALLOWED_HOSTS=["*"]
-    
 
 
 # Application definition
@@ -36,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'base.apps.BaseConfig',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -132,6 +126,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+    'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ],
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework_json_api.parsers.JSONParser',
     ),

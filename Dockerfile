@@ -3,7 +3,7 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 80
+EXPOSE 8000
 
 ADD . /django_ec2
 
@@ -15,4 +15,4 @@ RUN python manage.py makemigrations
 
 RUN python manage.py migrate
 
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:80" ]
+CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
