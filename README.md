@@ -1,6 +1,5 @@
 <a name="readme-top"></a>
 
-<!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -31,7 +30,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 The Django Stock Analysis Project is a web application built using the Django framework, designed for basic stock analysis. 
 It provides users with a user-friendly interface to analyze stock data, view historical trends, and make informed investment decisions.
 The project leverages Django's powerful features to manage user authentication, handle database operations, and deliver dynamic content.
@@ -44,8 +42,7 @@ Site also allows to scrap companies data using REST API
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Python][Python]][Python-url]
-
+* [![Python][Python.org]][Python-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 
