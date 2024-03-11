@@ -40,7 +40,7 @@ Site also allows to scrap companies data using REST API
 
 ### Built With
 
-* [![Bootstrap][Python.org]][Python-url]
+* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 
