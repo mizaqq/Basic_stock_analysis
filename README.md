@@ -40,9 +40,7 @@ Site also allows to scrap companies data using REST API
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Python][Python.org]][Python-url]
+* [![Bootstrap][Python.org]][Python-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 
