@@ -31,8 +31,6 @@ Site also allows to scrap companies data using REST API
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
 1. Turn on docker
 2. Login to docker
 3. docker run -e DJANGO_ALLOWED_HOSTS=* -p 8000:8000 mizaqq/basic_django_proj_run2
