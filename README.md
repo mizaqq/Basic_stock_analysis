@@ -80,13 +80,13 @@ You can add your own company to get its data to be analyzed if it is not already
 
 Get all the companies data and its basic indexes.
 ![image](https://github.com/mizaqq/Basic_stock_analysis/assets/59586131/f0c57c11-7dea-4233-bd63-1c21c02ca2d5)
-
-Scrap companies data using api endpoint 
-Link http://16.171.170.50:8000/api/
+<br>
+Scrap companies data using api endpoint <br>
+Link http://16.171.170.50:8000/api/<br>
 You can get your own api key by logging in and going to your account details. You can also regenerate your token there
-
+<br>
 Authentication has to be passed by Header in format "Authentication: Token <YOUR-API-KEY>
-
+<br>
 Python example
 ```
 url = 'http://127.0.0.1:8000/api/'
