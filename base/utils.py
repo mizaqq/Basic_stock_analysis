@@ -5,9 +5,22 @@ import pandas as pd
 import matplotlib
 from .models import Prices
 from datetime import date, timedelta
-def make_plot(df):
+
+def make_plot(df,days: int = 0, intervals:int = 5):
+    if(days!=0):
+        df=df[:days]
     matplotlib.use('agg')
     plt.plot(df['date'],df['close'])
+    begin=df['date'].iloc[-1]
+    end=df['date'][0]
+    total_duration=begin-end
+    interval_duration = total_duration / intervals
+    date_list = []
+    for i in range(intervals + 1):
+        date_list.append(begin - i * interval_duration)
+        
+    plt.xticks(date_list[::-1])
+    plt.grid()
     fig=plt.gcf()
     buf=io.BytesIO()
     fig.savefig(buf,format='png')

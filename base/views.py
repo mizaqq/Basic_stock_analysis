@@ -98,8 +98,7 @@ def companyRoom(request):
         Prices.objects.filter(symbol = comp.pk).values('date','close')                                 
         )
     uri = make_plot(df)
-    months3=date.today()- timedelta(days=90)
-    uri3 = make_plot(df[df['date']>months3])
+    uri3 = make_plot(df,55,3)
     
     if comp.grossprofit!=None:
         returnOnSales = comp.netprofit/comp.grossprofit

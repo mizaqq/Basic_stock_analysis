@@ -8,14 +8,14 @@ dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
     
-ALLOWED_HOSTS=os.environ.get("DJANGO_ALLOWED_HOSTS","").split(',')
+ALLOWED_HOSTS=os.environ.get("DJANGO_ALLOWED_HOSTS","*").split(',')
     
 SECRET_KEY = os.environ.get("SECRET_KEY","abc")
 
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 
-# Application definition
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 INSTALLED_APPS = [
     'django.contrib.admin',
